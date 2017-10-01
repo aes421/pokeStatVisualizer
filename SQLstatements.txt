@@ -1,15 +1,16 @@
 These are the statements used to create the database incase you'd like to replicate on your own server:
 
+CREATE DATABASE PokeStats;
 
 CREATE TABLE pokemon(id smallint(6) PRIMARY KEY,identifier varchar(255) NOT NULL,species_id smallint(6) NOT NULL,height smallint(6) NOT NULL,weight smallint(6) NOT NULL,base_experience smallint(6) NOT NULL,order_num smallint(6) NOT NULL,is_default smallint(6) NOT NULL);
-LOAD DATA LOCAL INFILE '/home/pi/pokeStatVisualizer/pokemon.csv' INTO TABLE pokemon FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
+LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/pokemon.csv' INTO TABLE pokemon FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
 
 
 CREATE TABLE stats(id smallint(2) PRIMARY KEY, damage_class_id smallint(2), identifier varchar(255) NOT NULL,is_battle_only smallint(2) NOT NULL,game_index smallint(2) NOT NULL);
-LOAD DATA LOCAL INFILE '/home/pi/pokeStatVisualizer/stats.csv' INTO TABLE stats FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
+LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/stats.csv' INTO TABLE stats FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
 
 CREATE TABLE pokemon_stats(pokemon_id smallint(6),stat_id smallint(2),base_stat smallint(6) NOT NULL,effort smallint(2) NOT NULL,PRIMARY KEY(pokemon_id,stat_id));
-LOAD DATA LOCAL INFILE '/home/pi/pokeStatVisualizer/pokemon_stats.csv' INTO TABLE pokemon_stats FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
+LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/pokemon_stats.csv' INTO TABLE pokemon_stats FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
 
 
 TEST:
