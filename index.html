@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-  	<script type="text/javascript" src="d3.min.js"></script>
-  	<script type="text/javascript" src="visualizer.js"></script>
+    <script type="text/javascript" src="d3.min.js"></script>
+    <script type="text/javascript" src="visualizer.js"></script>
   </head>
   <body>
-  	<form action="serverSide.php">
-  		<input type="submit" value="click on me!">
-	</form>
+  <form action="serverSide.php">
+      <select onchange="form.submit()">
+      <option value=1>HP</option>
+      <option value=2>Attack</option>
+    </select>
+  </form> 
   </body>
 </html>
