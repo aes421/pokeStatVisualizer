@@ -5,11 +5,14 @@
     <script type="text/javascript" src="visualizer.js"></script>
   </head>
   <body>
-  <form action="serverSide.php">
-      <select onchange="form.submit()">
-      <option value=1>HP</option>
-      <option value=2>Attack</option>
-    </select>
-  </form> 
+    <form>
+        <select name="stat" onchange="lookupStats(this.value)">
+        <option disabled selected value> -- select an option -- </option>
+        <option value=1>HP</option>
+        <option value=2>Attack</option>
+      </select>
+    </form> 
+    <br>
+    <div id="connectionInfo"></div>
   </body>
 </html>
