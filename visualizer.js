@@ -10,7 +10,8 @@ function visualize(json){
 	
 	var data = JSON.parse(json);
 
-	var root = d3.hierarchy(data);
+	//var root = d3.hierarchy(data);
+	var root = d3.hierarchy(({children: data}));
 
 	var node = svgContainer.selectAll(".node")
     .data(pack(root).leaves())
