@@ -8,26 +8,10 @@ function visualize(json){
 
     var forceSimulation = d3.forceSimulation(data)
 		.force('charge', d3.forceManyBody().strength(-20)) 
-  		.force('center', d3.forceCenter(width / 2, height / 2)); 
-
-  	// var node = svgContainer.selectAll(".node")
-   //  .data(data)
-   //  .enter().append("g")
-   //    .attr("class", "node");
-
-  //   var circles = node
-		// .selectAll("circle")
-		// .data(data)
-		// .enter()
-		// .append("circle")
-	 //        .attr("r", function (d) { return d.base_stat; })
-	 //        .style("fill", function (d) { return "red"; });
-		
-  //    node.selectAll("text")
- 	// 	.data(data)
- 	// 	.enter()
- 	// 	.append("text")
- 	// 		.text( function(d) { return d.identifier; });
+  		.force('center', d3.forceCenter(width / 2, height / 2))
+  		.force('collision', d3.forceCollide().radius(function(d) {
+    		return d.radius
+  		})); 
 
  	var node = svgContainer.append('g')
  		 .selectAll('circle')

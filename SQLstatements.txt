@@ -12,6 +12,12 @@ LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/stats
 CREATE TABLE pokemon_stats(pokemon_id smallint(6),stat_id smallint(2),base_stat smallint(6) NOT NULL,effort smallint(2) NOT NULL,PRIMARY KEY(pokemon_id,stat_id));
 LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/pokemon_stats.csv' INTO TABLE pokemon_stats FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
 
+CREATE TABLE pokemon_types(pokemon_id smallint(6),type_id smallint(2),slot smallint(2),PRIMARY KEY(pokemon_id,type_id));
+LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/pokemon_types.csv' INTO TABLE pokemon_types FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
+
+CREATE TABLE types(id smallint(6) PRIMARY KEY,identifier varchar(255),generation_id smallint(2),damage_class_id smallint(2));
+LOAD DATA LOCAL INFILE '/home/pi/Desktop/webserver/html/pokeStatVisualizer/types.csv' INTO TABLE types FIELDS TERMINATED BY ',' LINES TERMINATED BY'\n' IGNORE 1 LINES;
+
 
 TEST:
 SELECT pokemon.identifier, stats.identifier, pokemon_stats.base_stat FROM pokemon_stats INNER JOIN pokemon ON pokemon_stats.pokemon_id = pokemon.id INNER JOIN stats ON pokemon_stats.stat_id = stats.id WHERE pokemon.id = 1 AND pokemon_stats.stat_id = 1;
