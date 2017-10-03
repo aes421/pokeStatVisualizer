@@ -10,7 +10,7 @@ function visualize(json){
 		.force('charge', d3.forceManyBody().strength(-20)) 
   		.force('center', d3.forceCenter(width / 2, height / 2))
   		.force('collision', d3.forceCollide().radius(function(d) {
-    		return d.radius
+    		return d.base_stat;
   		})); 
 
  	var node = svgContainer.append('g')
