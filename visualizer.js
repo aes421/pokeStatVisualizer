@@ -1,5 +1,27 @@
 function visualize(json){
-	//var svgContainer = d3.select("body").append("svg").attr("width", 1000).attr("height", 1000);
+	var colorMap = new Map([
+		['1', ''],  //normal
+		['2', ''],  //fighting
+		['3', ''],  //flying
+		['4', ''],  //poison
+		['5', ''],  //ground
+		['6', ''],  //rock
+		['7', ''],  //bug
+		['8', ''],  //ghost
+		['9', ''],  //steel
+		['10', '#FF0000'], //fire
+		['11', ''], //water
+		['12', '#008000'], //grass
+		['13', ''], //electric
+		['14', ''], //psychic
+		['15', ''], //ice
+		['16', ''], //dragon
+		['17', ''], //dark
+		['18', ''], //fairy
+		['10001', ''], //unknown
+		['10002', ''] //shadow
+		]);
+
 	var svgContainer = d3.select("svg");
 	var width = svgContainer.attr("width");
 	var height = svgContainer.attr("height");
@@ -19,7 +41,7 @@ function visualize(json){
  		 .enter()
  		 .append('circle')
  		 	 .attr("r", function (d) { return d.base_stat; })
-	          .style("fill", function (d) { return "red"; });
+	          .style("fill", function (d) { return colorMap.get(d.type_id); });
 
 	var text = svgContainer
 	.append('g')
