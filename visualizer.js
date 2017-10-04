@@ -66,8 +66,13 @@ function visualize(json){
  		 .data(data)
  		 .enter()
  		 .append('circle')
- 		 	 .attr("r", function (d) { return d.base_stat; })
-	          .style("fill", function (d) { return colorMap.get(d.type_id); });
+ 		 	.attr("r", function (d) { return d.base_stat; })
+	        .style("fill", function (d) { return colorMap.get(d.type_id); })
+	        .call(d3.drag()
+	        	.on("start", dragstarted)
+	        	.on("drag", dragged)
+	        	.on("end", dragended)
+	        );
 
 	var text = svgContainer
 	.append('g')
@@ -88,14 +93,33 @@ function visualize(json){
     	.attr("x", function(d) { return d.x; })
     	.attr("y", function(d) { return d.y; });
   }
+
+  function dragstarted(d) {
+  if (!d3.event.active) forceSimulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
 }
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) forceSimulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+
+}
+
 
 function reset(){
 	var svgContainer = d3.select("svg");
 	svgContainer.selectAll("*").remove();
 	d3.select("svg").remove();
 }
-
 
 function lookupStats(stat){
 	if (window.XMLHttpRequest) {
