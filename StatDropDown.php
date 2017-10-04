@@ -1,5 +1,4 @@
 <?php
-	//connect to database
 	$db_params = parse_ini_file('/home/pi/Desktop/db_params.ini');
 	
 	try{
@@ -8,8 +7,8 @@
 		//set the PDO error mode to exception
     	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    	$query = $conn->prepare("SELECT pokemon.identifier, pokemon_stats.base_stat, pokemon_types.type_id FROM pokemon_stats INNER JOIN pokemon ON pokemon_stats.pokemon_id = pokemon.id INNER JOIN pokemon_types ON pokemon.id = pokemon_types.pokemon_id INNER JOIN types ON pokemon_types.type_id = types.id WHERE pokemon_stats.stat_id = :selected_stat AND pokemon_types.slot = 1;");
-    	$query->execute(array(':selected_stat' => $_GET['stat']));
+    	$query = $conn->prepare("SELECT id, identifier FROM stats WHERE is_battle_only = 0;");
+    	$query->execute();
 
     	//echo json_encode($query->fetchAll());
     	echo json_encode($query->fetchAll(PDO::FETCH_ASSOC));

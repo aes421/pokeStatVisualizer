@@ -115,3 +115,28 @@ function lookupStats(stat){
     xmlhttp.open("GET","serverSide.php?stat="+stat,true);
     xmlhttp.send();
 }
+
+function getDropdownValues(){
+if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } 
+    else {
+        // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        	var select = document.getElementById('stat');
+        	var stats = JSON.parse(xmlhttp.responseText);
+        	for (var i = 0; i < stats.length; i++){
+        		var option = new Option();
+        		option.text = stats[i].identifier;
+        		option.value = stats[i].id;
+        		select.options.add( option );
+        	}
+        }
+    };
+    xmlhttp.open("GET","StatDropDown.php");
+    xmlhttp.send();
+}

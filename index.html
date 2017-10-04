@@ -4,12 +4,10 @@
     <script type="text/javascript" src="d3.min.js"></script>
     <script type="text/javascript" src="visualizer.js"></script>
   </head>
-  <body>
+  <body onload="getDropdownValues()">
     <form>
-        <select name="stat" onchange="lookupStats(this.value)">
+        <select id="stat" name="stat" onchange="lookupStats(this.value)">
         <option disabled selected value> -- select an option -- </option>
-        <option value=1>HP</option>
-        <option value=2>Attack</option>
       </select>
     </form> 
     <br>
