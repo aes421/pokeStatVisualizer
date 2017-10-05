@@ -54,6 +54,8 @@ function visualize(json){
 	var width = svgContainer.attr("width");
 	var height = svgContainer.attr("height");
 
+	var focus = {};
+
     var forceSimulation = d3.forceSimulation(data)
 		.force('charge', d3.forceManyBody().strength(0)) 
   		.force('center', d3.forceCenter(space / 2 , space / 2))
@@ -68,11 +70,11 @@ function visualize(json){
  		 .append('circle')
  		 	.attr("r", function (d) { return d.base_stat; })
 	        .style("fill", function (d) { return colorMap.get(d.type_id); })
+	        .on("click", function (d) { return openLink(d); })
 	        .call(d3.drag()
 	        	.on("start", dragstarted)
 	        	.on("drag", dragged)
-	        	.on("end", dragended)
-	        );
+	        	.on("end", dragended));
 
 	var text = svgContainer
 	.append('g')
@@ -82,36 +84,42 @@ function visualize(json){
  	.append("text")
  		.text( function(d) { return d.identifier; });
 
-
  	forceSimulation.nodes(data).on("tick", ticked);
 
  	function ticked() {
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-    text
-    	.attr("x", function(d) { return d.x; })
-    	.attr("y", function(d) { return d.y; });
+	    node
+	        .attr("cx", function(d) { return d.x; })
+	        .attr("cy", function(d) { return d.y; });
+	    text
+	    	.attr("x", function(d) { return d.x; })
+	    	.attr("y", function(d) { return d.y; });
+	}
+
+	function dragstarted(d) {
+	  if (!d3.event.active) forceSimulation.alphaTarget(0.3).restart();
+	  d.fx = d.x;
+	  d.fy = d.y;
+	}
+
+	function dragged(d) {
+	  d.fx = d3.event.x;
+	  d.fy = d3.event.y;
+	}
+
+	function dragended(d) {
+	  if (!d3.event.active) forceSimulation.alphaTarget(0);
+	  d.fx = null;
+	  d.fy = null;
+	}
   }
 
-  function dragstarted(d) {
-  if (!d3.event.active) forceSimulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
-
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
-
-function dragended(d) {
-  if (!d3.event.active) forceSimulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
-
-
+function openLink(d){
+	var name = d.identifier.split('-')[0];
+	var formattedName = name[0].replace(/^./g, function(s){ return s.toUpperCase() }) 
+		+ name.slice(1, name.length);
+	var link = "https://bulbapedia.bulbagarden.net/wiki/" + formattedName +"_(Pok%C3%A9mon)"
+	window.open(link,
+		"_blank", "", false);
 }
 
 
