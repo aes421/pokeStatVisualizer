@@ -22,6 +22,11 @@ function visualize(json){
 		['10002', '#000000'] //shadow
 		]);
 
+	var textColorMap = new Map([
+			[0, "#000000"], //black
+			[1, "#FFFFFF"]  //white
+		]);
+
 	var data = JSON.parse(json);
 
 	//if we keep the data sorted we could changed this to just take the first and last
@@ -82,7 +87,8 @@ function visualize(json){
  	.data(data)
  	.enter()
  	.append("text")
- 		.text( function(d) { return d.identifier; });
+ 		.text( function(d) { return d.identifier; })
+ 			.style("fill", function(d){ return findTextColor(d); });
 
  	forceSimulation.nodes(data).on("tick", ticked);
 
@@ -111,6 +117,34 @@ function visualize(json){
 	  d.fx = null;
 	  d.fy = null;
 	}
+
+	function findTextColor(d){
+		for (var i = 0; i<textColorMap.size; i++){
+			var nodeColor = hexToRgb(colorMap.get(d.type_id));
+			var textColor = hexToRgb(textColorMap.get(i)); 
+			algorithm: https://www.w3.org/TR/AERT#color-contrast
+			var r = Math.max(nodeColor.r, textColor.r) - Math.min(nodeColor.r, textColor.r);
+			var g = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
+			var b = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
+			var diff = r + g + b;
+			if (diff >= 500){
+				return textColorMap.get(i);
+			}
+		}
+
+		return "black";
+
+	}
+
+	function hexToRgb(hex) {
+	//source; https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
   }
 
 function openLink(d){
