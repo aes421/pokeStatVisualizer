@@ -31,12 +31,12 @@ function visualize(json){
 
 	//if we keep the data sorted we could changed this to just take the first and last
 	var max = Math.max.apply(Math, data.map(function(o){return o.base_stat;}));
-	var min = Math.min.apply(Math, data.map(function(o){return o.base_stat;}));;
-	//Blissey has max hp at 255
+	var min = Math.min.apply(Math, data.map(function(o){return o.base_stat;}));
 	var linearScale = d3.scaleLinear().domain([min, max]).range([0,75]);
 
 	for (var i = 0; i < data.length; i++){
-			data[i].base_stat = linearScale(data[i].base_stat);
+		//scale the data to make it fit on the screen better
+		data[i].base_stat = linearScale(data[i].base_stat);
 	}
 
 	//dynamically determine svg space
@@ -74,7 +74,7 @@ function visualize(json){
  		 .enter()
  		 .append('circle')
  		 	.attr("r", function (d) { return d.base_stat; })
-	        .style("fill", function (d) { return colorMap.get(d.type_id); })
+	        .style("fill", function (d) { return getTypeColor(d); })
 	        .on("click", function (d) { return openLink(d); })
 	        .call(d3.drag()
 	        	.on("start", dragstarted)
@@ -119,32 +119,61 @@ function visualize(json){
 	}
 
 	function findTextColor(d){
-		for (var i = 0; i<textColorMap.size; i++){
-			var nodeColor = hexToRgb(colorMap.get(d.type_id));
-			var textColor = hexToRgb(textColorMap.get(i)); 
-			algorithm: https://www.w3.org/TR/AERT#color-contrast
-			var r = Math.max(nodeColor.r, textColor.r) - Math.min(nodeColor.r, textColor.r);
-			var g = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
-			var b = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
-			var diff = r + g + b;
-			if (diff >= 500){
-				return textColorMap.get(i);
-			}
-		}
-
+		// for (var i = 0; i<textColorMap.size; i++){
+		// 	var nodeColor = hexToRgb(colorMap.get(d.type_id));
+		// 	var textColor = hexToRgb(textColorMap.get(i)); 
+		// 	algorithm: https://www.w3.org/TR/AERT#color-contrast
+		// 	var r = Math.max(nodeColor.r, textColor.r) - Math.min(nodeColor.r, textColor.r);
+		// 	var g = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
+		// 	var b = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
+		// 	var diff = r + g + b;
+		// 	if (diff >= 500){
+		// 		return textColorMap.get(i);
+		// 	}
+		// }
+		//default
 		return "black";
-
 	}
 
 	function hexToRgb(hex) {
-	//source; https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-}
+		//source; https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    return result ? {
+	        r: parseInt(result[1], 16),
+	        g: parseInt(result[2], 16),
+	        b: parseInt(result[3], 16)
+	    } : null;
+	}
+
+	function getTypeColor(d){
+		var types = d.type_id.split(',');
+		if (types.length === 1){
+			return colorMap.get(types[0]);
+		}
+		else{
+			//color gradient for half filled circle
+			var grad = svgContainer
+				.append("grad")
+				.append("linearGradient")
+					.attr("x1", "0%")
+					.attr("x2", "0%")
+					.attr("y1", "100%")
+					.attr("y2", "0%");
+			var type1 = colorMap.get(types[0]);
+			var type2 = colorMap.get(types[1]);
+
+			grad.append("stop")
+					.attr("offset", "50%")
+					.style("stop-color", type1);
+			grad.append("stop")
+					.attr("offset", "50%")
+					.style("stop-color", type2);
+
+			return "url(#grad)";
+		}
+
+		
+	}
   }
 
 function openLink(d){
