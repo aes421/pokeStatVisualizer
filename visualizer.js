@@ -74,7 +74,8 @@ function visualize(json){
  		 .enter()
  		 .append('circle')
  		 	.attr("r", function (d) { return d.base_stat; })
-	        .style("fill", function (d) { return getTypeColor(d); })
+	        .style("fill", function (d) { var color = getTypeColor(d); 
+	        								return color; })
 	        .on("click", function (d) { return openLink(d); })
 	        .call(d3.drag()
 	        	.on("start", dragstarted)
@@ -151,11 +152,13 @@ function visualize(json){
 			return colorMap.get(types[0]);
 		}
 		else{
+			//weird dynamic id
+			var gradID = "grad" + d.identifier;
 			//color gradient for half filled circle
 			var grad = svgContainer
 				.append("grad")
 				.append("linearGradient")
-					.attr("id", "grad")
+					.attr("id", gradID)
 					.attr("x1", "0%")
 					.attr("x2", "0%")
 					.attr("y1", "100%")
@@ -170,7 +173,7 @@ function visualize(json){
 					.attr("offset", "50%")
 					.style("stop-color", type2);
 
-			return "url(#grad)";
+			return "url(#"+gradID+")";
 		}		
 	}
 }
