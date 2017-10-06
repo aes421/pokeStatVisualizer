@@ -155,6 +155,7 @@ function visualize(json){
 			var grad = svgContainer
 				.append("grad")
 				.append("linearGradient")
+					.attr("id", "grad")
 					.attr("x1", "0%")
 					.attr("x2", "0%")
 					.attr("y1", "100%")
@@ -170,11 +171,10 @@ function visualize(json){
 					.style("stop-color", type2);
 
 			return "url(#grad)";
-		}
-
-		
+		}		
 	}
-  }
+}
+
 
 function openLink(d){
 	var name = d.identifier.split('-')[0];
