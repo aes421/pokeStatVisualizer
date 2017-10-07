@@ -120,18 +120,22 @@ function visualize(json){
 	}
 
 	function findTextColor(d){
-		// for (var i = 0; i<textColorMap.size; i++){
-		// 	var nodeColor = hexToRgb(colorMap.get(d.type_id));
-		// 	var textColor = hexToRgb(textColorMap.get(i)); 
-		// 	algorithm: https://www.w3.org/TR/AERT#color-contrast
-		// 	var r = Math.max(nodeColor.r, textColor.r) - Math.min(nodeColor.r, textColor.r);
-		// 	var g = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
-		// 	var b = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
-		// 	var diff = r + g + b;
-		// 	if (diff >= 500){
-		// 		return textColorMap.get(i);
-		// 	}
-		// }
+		for (var i = 0; i<textColorMap.size; i++){
+			//get multiple types
+			var types = d.type_id.split(',');
+			var nodeColor = hexToRgb(colorMap.get(types[0])); 
+
+			
+			var textColor = hexToRgb(textColorMap.get(i)); 
+			//algorithm: https://www.w3.org/TR/AERT#color-contrast
+			var r = Math.max(nodeColor.r, textColor.r) - Math.min(nodeColor.r, textColor.r);
+			var g = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
+			var b = Math.max(nodeColor.g, textColor.g) - Math.min(nodeColor.g, textColor.g);
+			var diff = r + g + b;
+			if (diff >= 500){
+				return textColorMap.get(i);
+			}
+		}
 		//default
 		return "black";
 	}
@@ -163,15 +167,15 @@ function visualize(json){
 					.attr("x2", "0%")
 					.attr("y1", "100%")
 					.attr("y2", "0%");
-			var type1 = colorMap.get(types[0]);
-			var type2 = colorMap.get(types[1]);
+			var primary = colorMap.get(types[0]);
+			var secondary = colorMap.get(types[1]);
 
 			grad.append("stop")
 					.attr("offset", "50%")
-					.style("stop-color", type1);
+					.style("stop-color", secondary);
 			grad.append("stop")
 					.attr("offset", "50%")
-					.style("stop-color", type2);
+					.style("stop-color", primary);
 
 			return "url(#"+gradID+")";
 		}		
